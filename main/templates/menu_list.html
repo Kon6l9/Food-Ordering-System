@@ -1,0 +1,118 @@
+{% extends 'mainbase.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .card {
+        margin: 10px;  /* Provides space between cards */
+        width: auto;  /* Allows the card to expand to fill the column width */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);  /* Optional: Adds shadow for better visual separation */
+        border-radius: 20px;
+      }
+      
+    
+    .row {
+        margin-right: -5px;  /* Adjust row right margin */
+        margin-left: -5px;  /* Adjust row left margin */
+    }
+
+    .col-md-3 {
+        padding-right: 5px;  /* Reduces right padding on each column */
+        padding-left: 5px;  /* Reduces left padding on each column */
+    }
+    .card-img-top {
+        width: 100%;  /* Ensures the image fills the card width */
+        height: 150px;  /* Fixed height for consistency */
+        object-fit: cover;  /* Ensures the image covers the area without distorting aspect ratio */
+        border-radius: 5px;
+    }
+</style>
+<div>
+    <h2 class="text-center" style="margin-right:110vh; padding-top:5vh; ">Restaurants and Menus</h2>
+    <div class="container border-top shadow " style="min-height:100vh; min-width:150vh; margin-bottom:15px; margin-top:50px; border-radius: 20px;" >
+        <div class="text-right" style="padding:10px;">
+            <div>
+                <!-- Sorting Dropdown -->
+                Sort By:
+                <select id="sortOrder" onchange="location = this.value;">
+                    <option value="?sort=name_asc">Name A-Z</option>
+                    <option value="?sort=name_desc">Name Z-A</option>
+                    <option value="?sort=popularity">Popularity</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            {% for menu in page_obj %}
+                <div class="col-md-3">
+                    <div class="card shadow-lg hover">
+                        <a href="{% url 'menu' menu.id %}">
+                            {% if menu.image %} 
+                            <img src="{{ menu.image.url }}" class="card-img-top">
+                            {% else %}
+                            <img src="{% static "menu_placeholder.jpg" %}" class="card-img-top">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title" style="color:black;">{{ menu.name }}</h5>
+                                <p class="card-text"></p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No menus available.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('sortOrder').value = "?sort={{ request.GET.sort|default:"name_asc" }}";
+
+    function nearBottomOfPage() {
+        return window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 2;
+    }
+    
+    let currentPage = 1; // Track the current page
+    let isLoading = false; // Flag to prevent multiple simultaneous requests
+    let hasMore = true; // Flag to indicate if there are more pages to load
+    
+    window.addEventListener('scroll', () => {
+        // Check if user is near the bottom, and there are more menus to load
+        if (nearBottomOfPage() && !isLoading && hasMore) {
+            isLoading = true;
+            currentPage += 1; // Prepare to load the next page
+            fetch(`?page=${currentPage}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Django checks for this header
+                }
+            }).then(response => response.json())
+              .then(data => {
+                data.menus.forEach(menu => {
+                    const menuCard = createMenuCard(menu); // Function to create menu HTML
+                    document.querySelector('.row').append(menuCard); // Append new menus to the row
+                });
+                hasMore = data.has_next; // Update if more pages are available
+                isLoading = false; // Reset loading flag
+            }).catch(() => isLoading = false); // Reset loading flag in case of error
+        }
+    });
+    
+    // Function to create menu card elements
+    function createMenuCard(menu) {
+        const colDiv = document.createElement('div');
+        colDiv.className = 'col-md-3';
+        colDiv.innerHTML = `
+            <div class="card shadow-lg hover">
+                <a href="/menu/${menu.id}">
+                    <img src="${menu.image_url || '{% static "menu_placeholder.jpg" %}'}" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color:black;">${menu.name}</h5>
+                    </div>
+                </a>
+            </div>
+        `;
+        return colDiv;
+    }
+    </script>
+</script>
+
+{% endblock %}

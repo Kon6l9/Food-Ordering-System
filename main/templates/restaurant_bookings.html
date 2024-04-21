@@ -1,0 +1,76 @@
+{% extends "mainbase.html" %}
+
+{% block content %}
+<style>
+  .orders-list {
+      width: calc(100% / 3); 
+      height: 35vh; 
+      overflow-y: auto; 
+      margin-right: 5px; 
+      border: 2px solid #ccc; 
+      padding: 10px; /* Ensure equal padding for all divs */
+  }
+</style>
+<div class="container mt-4 border-bottom" style="padding-bottom:25px; min-height:90vh;">
+  <h1 style="center inline" class="text-center "> Bookings </h1>
+  <div class="orders-container" style="display: flex;">
+      <div class="orders-list border shadow">
+        <h3 style="center inline" class="text-center ">Booking Requests ({{ bookings_request_count }})</h3>
+        {% for booking in bookings_request %}
+            <div class="order-container border mb-3" style="padding: 10px;">
+              <p>Booking ID: {{ booking.id }}</p>
+              <p>Date: {{ booking.date }}</p>
+              <p>Time: {{ booking.time }}</p>
+              <!-- Button to change status to Accepted -->
+              <form action="{% url 'update_booking_status' booking.id 'accepted' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Move to Accepted</button>
+              </form>
+            </div>
+            {% empty %}
+            <p>No request bookings.</p>
+        {% endfor %}
+      </div>
+
+      <div class="orders-list border shadow">
+        <h3 style="center inline" class="text-center ">Accepted Bookings ({{ bookings_accepted_count }})</h3>
+        {% for booking in bookings_accepted %}
+            <div class="order-container border mb-3" style="padding: 10px;">
+              <p>Booking ID: {{ booking.id }}</p>
+              <p>Date: {{ booking.date }}</p>
+              <p>Time: {{ booking.time }}</p>
+              <!-- Buttons to change status -->
+              <form action="{% url 'update_booking_status' booking.id 'request' %}" method="post" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-warning">Revert to Request</button>
+              </form>
+              <form action="{% url 'update_booking_status' booking.id 'completed' %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Complete Booking</button>
+              </form>
+            </div>
+            {% empty %}
+            <p>No accepted bookings.</p>
+        {% endfor %}
+      </div>
+
+      <div class="orders-list border shadow">
+        <h3 style="center inline" class="text-center ">Completed Bookings ({{ bookings_completed_count }})</h3>
+        {% for booking in bookings_completed %}
+            <div class="order-container border mb-3" style="padding: 10px;">
+              <p>Booking ID: {{ booking.id }}</p>
+              <p>Date: {{ booking.date }}</p>
+              <p>Time: {{ booking.time }}</p>
+              <!-- Buttons to change status -->
+              <form action="{% url 'update_booking_status' booking.id 'accepted' %}" method="post" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-warning">Revert to Accepted</button>
+              </form>
+            </div>
+            {% empty %}
+            <p>No completed bookings.</p>
+        {% endfor %}
+      </div>
+  </div>
+</div>
+{% endblock %}

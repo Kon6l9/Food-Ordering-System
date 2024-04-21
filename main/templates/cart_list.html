@@ -1,0 +1,28 @@
+{% extends "mainbase.html" %}
+
+{% block content %}
+
+<div class="container" style="min-height:100vh">
+    <h1>Your Cart Orders</h1>
+    {% if carts %}
+        {% for cart in carts %}
+            <!-- Using a Bootstrap card for each order -->
+            <div class="card mb-3 hover ">
+                <div class="card-body">
+                    <!-- Making the entire card clickable -->
+                    <a href="{% url 'cart_detail' cart_id=cart.id %}" class="stretched-link" style="text-decoration: none; color: inherit;">
+                        <h5 class="card-title">Order #{{ cart.id }}</h5>
+                        <p class="card-text">
+                            Order Date: {{ cart.created_at|date:"Y-m-d" }} <br>
+                            Menu: {{ cart.items.first.food_item.section.menu.name }}
+                        </p>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>You do not have any active cart orders.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,130 @@
+{% extends "mainbase.html" %}
+
+{% block content %}
+<style>
+  .orders-list {
+    width: calc(100% / 3); 
+    height: 35vh; 
+    overflow-y: auto; 
+    margin-right: 5px; 
+    border: 2px solid #ccc; 
+    padding: 10px;
+}
+</style>
+<div class="container mt-4 border-bottom" style="padding-bottom:25px; min-height:90vh;">
+  <h1 class="text-center "> Orders </h1>
+  <div class="orders-container" style="display: flex;">
+      <div class="orders-list border shadow" >
+        <h3 class="text-center ">Order Requests ({{ orders_request_count }})</h3>
+        {% for order in orders_request %}
+            <div class="order-container border mb-3 " style="padding: 10px;">
+              <table class="table">
+                <thead>
+                  <td>Order ID: {{ order.id }}</td>
+                  <td>Cost: ${{ order.get_total_cost }}</td>
+                  <tr>
+                    
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in order.items.all %}
+                    <tr>
+                      <td>{{ item.food_item.name }}</td>
+                      <td>{{ item.quantity }}</td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+                    
+              <!-- Button to change status to Processing -->
+              <form action="{% url 'update_order_status' order.id 'processing' %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-primary">Move to Processing</button>
+              </form>
+            </div>
+            {% empty %}
+            <p>No request orders.</p>
+        {% endfor %}
+      </div>
+
+      <div class="orders-list border shadow" style="padding: 10px;"  >
+        <h3 style="center inline" class="text-center ">Processing Orders ({{ orders_processing_count }})</h3>
+        {% for order in orders_processing %}
+            <div class="order-container border mb-3" style="padding: 10px;">
+              <table class="table">
+                <thead>
+                  <td>Order ID: {{ order.id }}</td>
+                  <td>Cost: ${{ order.get_total_cost }}</td>
+                  <tr>
+                    
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in order.items.all %}
+                    <tr>
+                      <td>{{ item.food_item.name }}</td>
+                      <td>{{ item.quantity }}</td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+                    
+                <!-- Buttons to change status -->
+                <form action="{% url 'update_order_status' order.id 'request' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">Revert to Request</button>
+                </form>
+                <form action="{% url 'update_order_status' order.id 'completed' %}" method="post" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-success">Complete Order</button>
+                </form>
+            </div>
+            {% empty %}
+            <p>No processing orders.</p>
+        {% endfor %}
+      </div>
+
+      <div class="orders-list border shadow" style="padding: 10px;">
+        <h3 style="center inline" class="text-center ">Completed Orders ({{ orders_completed_count }})</h3>
+        {% for order in orders_completed %}
+            <div class="order-container border mb-3" style="padding: 10px;">
+              <table class="table">
+                <thead>
+                  <td>Order ID: {{ order.id }}</td>
+                  <td>Cost: ${{ order.get_total_cost }}</td>
+                  <tr>
+                    
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in order.items.all %}
+                    <tr>
+                      <td>{{ item.food_item.name }}</td>
+                      <td>{{ item.quantity }}</td>
+                    </tr>
+                  {% endfor %}
+
+                </tbody>
+              </table>
+                    
+                <!-- Buttons to change status -->
+                <form action="{% url 'update_order_status' order.id 'processing' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning">Revert to Processing</button>
+                </form>
+            </div>
+            {% empty %}
+            <p>No completed orders.</p>
+        {% endfor %}
+      </div>
+  </div>
+</div>
+{% endblock %}

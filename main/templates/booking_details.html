@@ -1,0 +1,16 @@
+{% extends "mainbase.html" %}
+
+{% block content %}
+<div class="container mt-4" style="min-height:90vh;">
+    <h2>Booking Details</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Booking at {{ booking.restaurant.restaurant_name }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Status: {{ booking.get_status_display }}</h6>
+            <p class="card-text">Date: {{ booking.date }}</p>
+            <p class="card-text">Time: {{ booking.time }}</p>
+            <p class="card-text">Customer: {{ booking.customer.email }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

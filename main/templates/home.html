@@ -1,0 +1,212 @@
+{% extends 'mainbase.html' %}
+{% load static %}
+{% block content %}
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css
+" rel="stylesheet">
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+<style>
+  .main {
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* Full viewport height, adjust only if necessary */
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+  }
+
+  .home-section {
+    height: 100vh;
+    scroll-snap-align: start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box; /* This ensures padding is included in the height */
+  }
+  .bg-light {
+    background-color: #f8f9fa;
+  }
+
+  .bg-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  .btn-primary, .btn-secondary {
+      padding: 10px 20px;
+      border: none;
+      color: white;
+  }
+
+  .card {
+    margin: 10px;  /* Provides space between cards */
+    width: auto;  /* Allows the card to expand to fill the column width */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);  /* Optional: Adds shadow for better visual separation */
+    text-decoration: none;
+  }
+
+  .row {
+      margin-right: -5px;  /* Adjust row right margin */
+      margin-left: -5px;  /* Adjust row left margin */
+  }
+
+  .col-md-3 {
+      padding-right: 5px;  /* Reduces right padding on each column */
+      padding-left: 5px;  /* Reduces left padding on each column */
+  }
+  .card-img-top {
+    width: 100%;  /* Ensures the image fills the card width */
+    height: 150px;  /* Fixed height for consistency */
+    object-fit: cover;  /* Ensures the image covers the area without distorting aspect ratio */
+  }
+
+  .text-center {
+      text-align: center;
+  }
+
+  .text-white {
+      color: white;
+  }
+  .bg{
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+  }
+</style>
+
+<div class = "main">
+  <div class="home-section bg" id="section-login" style="background-image: url('{% static "bg1.jpg" %}');"> 
+      <div class="container text-center" style="color:white;">
+          <h1>Welcome to Food Ordering System</h1>
+          <p>Explore top dining spots or join us as a featured restaurant.</p>
+          {% if user.is_authenticated %}
+              {% comment %} <a href="{% url 'profile' %}" class="btn btn-primary">View Profile</a> {% endcomment %}
+          {% else %}
+              <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+              <a href="{% url 'signup' %}" class="btn btn-secondary">Sign Up</a>
+          {% endif %}
+          <div class="mt-4">
+            <a href="{% url 'menu_list' %}" class="btn btn-success">Explore Now</a>
+          </div>
+      </div>
+  </div>
+
+  <div class="home-section bg bg-secondary bg-gradient" id="section-best-restaurants" >
+      <div class="container" >
+          <h2>Our Top Restaurants</h2>
+          <div class="row">
+              {% for menu in menus %}
+              <div class="col-md-3">
+                  <div class="card shadow-lg hover">
+                    <a href="{% url 'menu' menu.id %}">
+                      {% if menu.image %} 
+                        <img src="{{ menu.image.url }}" class="card-img-top">
+                      {% else %}
+                        <img src="{% static "menu_placeholder.jpg" %}" class="card-img-top">
+                      {% endif %}
+                      <div class="card-body">
+                          <h5 class="card-title" style="color:black;">{{ menu.name }}</h5>
+                          <p class="card-text"></p>
+                      </div>
+                    </a>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+  </div>
+  
+  <div class="home-section bg-dark bg-gradient" id="section-stats">
+    <div class="container text-center">
+        <h1 class="community-heading">Our Community</h1>  <!-- Big heading for the section -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="counter-box colored">
+                    <i class="fa fa-group"></i>
+                    <span class="counter">{{ total_customers }}</span>
+                    <p>Registered Customers</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="counter-box">
+                    <i class="fa fa-cutlery"></i>
+                    <span class="counter">{{ total_restaurants }}</span>
+                    <p>Registered Restaurants</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="counter-box">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="counter">{{ total_food_items }}</span>
+                    <p>Available Products</p>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<style>
+  .community-heading {
+    color: #fff; /* Adjust the color to fit your site’s theme */
+    text-align: center; /* Center the heading */
+    font-size: 48px; /* Large font size for emphasis */
+    font-weight: bold; /* Bold text for better visibility */
+    margin-bottom: 40px; /* Spacing between the heading and the counters */
+    padding-top: 20px; /* Padding at the top for spacing */
+}
+.counter-box {
+	display: block;
+	background: #f6f6f6;
+	padding: 40px 20px 37px;
+	text-align: center
+}
+
+.counter-box p {
+	margin: 5px 0 0;
+	padding: 0;
+	color: #909090;
+	font-size: 18px;
+	font-weight: 500
+}
+
+.counter-box i {
+	font-size: 60px;
+	margin: 0 0 15px;
+	color: #d2d2d2
+}
+
+.counter { 
+	display: block;
+	font-size: 32px;
+	font-weight: 700;
+	color: #666;
+	line-height: 28px
+}
+
+.counter-box.colored {
+      background: #3acf87;
+}
+
+.counter-box.colored p,
+.counter-box.colored i,
+.counter-box.colored .counter {
+	color: #fff
+}
+</style>
+<script>
+  $(document).ready(function() {
+
+      $('.counter').each(function () {
+    $(this).prop('Counter',0).animate({
+        Counter: $(this).text()
+    }, {
+        duration: 4000,
+        easing: 'swing',
+        step: function (now) {
+            $(this).text(Math.ceil(now));
+        }
+    });
+  });
+
+  });  
+</script>
+{% endblock %}

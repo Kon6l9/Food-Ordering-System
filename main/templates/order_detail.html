@@ -1,0 +1,37 @@
+{% extends "mainbase.html" %}
+
+{% block content %}
+<div class="container mt-4" style="min-height:90vh;">
+    <h1>Order Details for Order #{{ order.id }}</h1>
+    <div class="card">
+        <div class="card-header">
+            Order Status: {{ order.get_status_display }}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Order placed on {{ order.created_at|date:"Y-m-d H:i" }}</h5>
+            <p class="card-text">Total Cost: ${{ order.get_total_cost }}</p>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Price per Item</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>{{ item.food_item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.food_item.price }}</td>
+                        <td>${{ item.get_cost }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

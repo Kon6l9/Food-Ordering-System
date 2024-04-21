@@ -1,0 +1,168 @@
+{% extends "mainbase.html" %}
+
+{% block content %}
+<style>
+    .flex-container {
+        display: flex;
+        height: 80vh;
+    }
+    .vnav {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+    }
+    .vnav a {
+        display: block;
+        color: #000;
+        padding: 8px 16px;
+        text-decoration: none;
+    }
+    .vnav a:hover {
+        background-color: #555;
+        color: white;
+    }
+    .content-area {
+        flex-grow: 1;
+        padding: 20px;
+        background-color: #fff;
+        overflow-y: auto;
+    }
+    .content-section {
+        display: none;
+    }
+    .content-section.active {
+        display: block;
+    }
+    .profile-nav-link.active {
+        background-color: #555; /* Darker background for active link */
+        color: white; /* White text for active link */
+    }
+</style>
+
+<div class="container border" style="display: flex; align-items: flex-end; min-height: 15vh; min-width:200vh;background-color: #f1f1f1;  ">
+    <h1 style="margin-left:30vh;">Account Settings</h1>
+</div>
+
+<div class="flex-container">
+    <ul class="vnav border-right" style="min-width:50vh; text-align:right;">
+        <li><a href="javascript:void(0);" class="profile-nav-link" onclick="switchContent('profile')">Profile Details</a></li>
+    </ul>
+
+    <div class="content-area">
+        <div id="profile" class="content-section active">
+            <!-- Profile Details Form -->
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="container" style = "padding-top:10vh">
+                    <div class="row gutters">
+                    <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12">
+                    <div class="card h-100 shadow-lg">
+                        <div class="card-body">
+                            <div class="account-settings">
+                                <div class="user-profile" style="text-align:center;">
+                                    <div class="user-avatar border-bottom" >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                                        </svg>
+                                    </div>
+                                    <h5 class="user-name border-top" style = "padding-top:20px;">{{restaurant_profile.restaurant_name}}</h5>
+                                    <h6 class="user-email">{{user.email}}</h6>
+                                    <h6 class="user-phone">Contacts:{{restaurant_profile.phone}}</h6>
+                                    
+                                </div>
+            
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 col-12">
+                    <div class="card h-100 shadow-lg">
+                        <div class="card-body">
+                            <div class="row gutters">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <h6 class="mb-2 text-primary">Personal Details</h6>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="FirstName">Name</label>
+                                        {{ profile_form.restaurant_name }}
+            
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="Address">Address</label>
+                                        {{ profile_form.address }}
+            
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="phone">Phone</label>
+                                        {{profile_form.phone}}
+                
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                    <div class="form-group">
+                                        <label for="E-mail">E-mail</label>
+                                        {{user_form.email}}
+                                        {% if user_form.email.errors %}
+                                            <div class="alert alert-danger">
+                                                {{ user_form.email.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row gutters">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="text-right">
+                                        <button type="button" id="submit" name="submit" class="btn btn-secondary" onClick="window.location.reload();">Cancel</button>
+                                        <button type="submit" id="submit" name="submit" class="btn btn-primary">Update</button>
+                                        <a class="btn btn-primary" href="/" role="button">Go Back</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>
+<script>
+    function switchContent(sectionId) {
+        const sections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.profile-nav-link');
+    
+        // Hide all sections
+        sections.forEach(section => {
+            section.style.display = 'none';
+        });
+    
+        // Remove active class from all nav links
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+        });
+    
+        // Display the clicked section
+        const activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+            activeSection.style.display = 'block';
+        }
+    
+        // Highlight the clicked nav link
+        document.querySelector(`a[onclick="switchContent('${sectionId}')"]`).classList.add('active');
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        switchContent('profile'); // Default active section on page load
+    });
+</script>
+{% endblock %}
+
+
+
