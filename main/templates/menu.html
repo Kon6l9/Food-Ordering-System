@@ -382,8 +382,7 @@
         $('#editSectionModal').modal('show');
     }
 
-    function openEditItemModal(foodId, foodName, foodPrice) {
-        console.log("Editing food:", foodName);  // Ensure this is logging correctly
+    function openEditItemModal(foodId, foodName, foodPrice) {  
         
         // Set the values in the modal
         document.getElementById('editFoodId').value = foodId;
@@ -425,81 +424,81 @@
     });
 
 
-})
-$(document).ready(function() {
-    $('.change-quantity').click(function() {
-        var foodId = $(this).data('id');
-        var changeType = $(this).data('change');
-        var input = $('.quantity-input[data-id="' + foodId + '"]');
-        var currentValue = parseInt(input.val());
+    })
+    $(document).ready(function() {
+        $('.change-quantity').click(function() {
+            var foodId = $(this).data('id');
+            var changeType = $(this).data('change');
+            var input = $('.quantity-input[data-id="' + foodId + '"]');
+            var currentValue = parseInt(input.val());
 
-        if (changeType == 'increase') {
-            currentValue += 1;
-        } else if (changeType == 'decrease' && currentValue > 1) {
-            currentValue -= 1;
-        }
+            if (changeType == 'increase') {
+                currentValue += 1;
+            } else if (changeType == 'decrease' && currentValue > 1) {
+                currentValue -= 1;
+            }
 
-        input.val(currentValue);
-    });
+            input.val(currentValue);
+        });
 
-    $('.add-to-cart').click(function() {
-        var foodId = $(this).data('id');
-        var quantity = $('.quantity-input[data-id="' + foodId + '"]').val();
+        $('.add-to-cart').click(function() {
+            var foodId = $(this).data('id');
+            var quantity = $('.quantity-input[data-id="' + foodId + '"]').val();
 
-        // AJAX call to add item to the cart
-        $.post('/add-to-cart/', {food_id: foodId, quantity: quantity}, function(data) {
-            alert('Item added to cart!');
-        }).fail(function() {
-            alert('Error adding item to cart.');
+            // AJAX call to add item to the cart
+            $.post('/add-to-cart/', {food_id: foodId, quantity: quantity}, function(data) {
+                alert('Item added to cart!');
+            }).fail(function() {
+                alert('Error adding item to cart.');
+            });
         });
     });
-});
-;
-function uploadImage() {
-    var fileInput = document.getElementById('menuImageUpload');
-    var formData = new FormData();
-    formData.append('image', fileInput.files[0]); 
-    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); 
+    ;
+    function uploadImage() {
+        var fileInput = document.getElementById('menuImageUpload');
+        var formData = new FormData();
+        formData.append('image', fileInput.files[0]); 
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); 
 
-    // AJAX request to the server to upload the image
-    $.ajax({
-        url: "{% url 'update_menu_image' menu.id %}", // URL to the view handling the upload
-        type: 'POST',
-        data: formData,
-        processData: false,  // tell jQuery not to process the data
-        contentType: false,  // tell jQuery not to set contentType
-        success: function (data) {
-            alert('Image uploaded successfully!');
-            $('.background-image').css('background-image', 'url(' + URL.createObjectURL(fileInput.files[0]) + ')');
-        },
-        error: function () {
-            alert('Failed to upload image.');
-        }
-    });
-}
-function uploadFoodImage(foodId) {
-    var fileInput = document.getElementById('foodImageUpload' + foodId);
-    var file = fileInput.files[0];
-    var formData = new FormData();
-    formData.append('image', file); 
-    formData.append('food_id', foodId); // Pass the food ID
-    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); // CSRF token
+        // AJAX request to the server to upload the image
+        $.ajax({
+            url: "{% url 'update_menu_image' menu.id %}", // URL to the view handling the upload
+            type: 'POST',
+            data: formData,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
+            success: function (data) {
+                alert('Image uploaded successfully!');
+                $('.background-image').css('background-image', 'url(' + URL.createObjectURL(fileInput.files[0]) + ')');
+            },
+            error: function () {
+                alert('Failed to upload image.');
+            }
+        });
+    }
+    function uploadFoodImage(foodId) {
+        var fileInput = document.getElementById('foodImageUpload' + foodId);
+        var file = fileInput.files[0];
+        var formData = new FormData();
+        formData.append('image', file); 
+        formData.append('food_id', foodId); // Pass the food ID
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}'); // CSRF token
 
-    $.ajax({
-        url: "{% url 'upload_food_image' %}", // URL to Django view that handles the upload
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            alert('Image uploaded successfully!');
-            location.reload(); // Reload the page 
-        },
-        error: function() {
-            alert('Failed to upload image.');
-        }
-    });
-}
+        $.ajax({
+            url: "{% url 'upload_food_image' %}", // URL to Django view that handles the upload
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert('Image uploaded successfully!');
+                location.reload(); // Reload the page 
+            },
+            error: function() {
+                alert('Failed to upload image.');
+            }
+        });
+    }
 
 </script>
 {% endblock %}
