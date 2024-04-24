@@ -79,7 +79,6 @@
           <h1>Welcome to Food Ordering System</h1>
           <p>Explore top dining spots or join us as a featured restaurant.</p>
           {% if user.is_authenticated %}
-              {% comment %} <a href="{% url 'profile' %}" class="btn btn-primary">View Profile</a> {% endcomment %}
           {% else %}
               <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
               <a href="{% url 'signup' %}" class="btn btn-secondary">Sign Up</a>
@@ -146,51 +145,51 @@
 </div>
 <style>
   .community-heading {
-    color: #fff; /* Adjust the color to fit your site’s theme */
-    text-align: center; /* Center the heading */
-    font-size: 48px; /* Large font size for emphasis */
-    font-weight: bold; /* Bold text for better visibility */
-    margin-bottom: 40px; /* Spacing between the heading and the counters */
-    padding-top: 20px; /* Padding at the top for spacing */
-}
-.counter-box {
-	display: block;
-	background: #f6f6f6;
-	padding: 40px 20px 37px;
-	text-align: center
-}
+    color: #fff; 
+    text-align: center; 
+    font-size: 48px; 
+    font-weight: bold; 
+    margin-bottom: 40px; 
+    padding-top: 20px; 
+  }
+  .counter-box {
+    display: block;
+    background: #f6f6f6;
+    padding: 40px 20px 37px;
+    text-align: center
+  }
 
-.counter-box p {
-	margin: 5px 0 0;
-	padding: 0;
-	color: #909090;
-	font-size: 18px;
-	font-weight: 500
-}
+  .counter-box p {
+    margin: 5px 0 0;
+    padding: 0;
+    color: #909090;
+    font-size: 18px;
+    font-weight: 500
+  }
 
-.counter-box i {
-	font-size: 60px;
-	margin: 0 0 15px;
-	color: #d2d2d2
-}
+  .counter-box i {
+    font-size: 60px;
+    margin: 0 0 15px;
+    color: #d2d2d2
+  }
 
-.counter { 
-	display: block;
-	font-size: 32px;
-	font-weight: 700;
-	color: #666;
-	line-height: 28px
-}
+  .counter { 
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: #666;
+    line-height: 28px
+  }
 
-.counter-box.colored {
-      background: #3acf87;
-}
+  .counter-box.colored {
+        background: #3acf87;
+  }
 
-.counter-box.colored p,
-.counter-box.colored i,
-.counter-box.colored .counter {
-	color: #fff
-}
+  .counter-box.colored p,
+  .counter-box.colored i,
+  .counter-box.colored .counter {
+    color: #fff
+  }
 </style>
 <script>
   $(document).ready(function() {

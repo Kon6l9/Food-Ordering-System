@@ -60,7 +60,6 @@ class CustomUserForm(UserChangeForm):
     
     def clean_email(self):
         email = self.cleaned_data['email']
-        # Check if any other user has this email
         if CustomUser.objects.filter(email=email).exclude(id=self.instance.id).exists():
             raise forms.ValidationError("This email address is already in use.")
         return email

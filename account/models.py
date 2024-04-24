@@ -37,7 +37,6 @@ class RestaurantProfile(models.Model):
 
 class CustomerProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='customer_profile')
-    # Add more fields specific to CustomerProfile
     first_name = models.CharField(max_length=50,default='first name')
     last_name = models.CharField(max_length=50,default='last name')
     phone = models.CharField(max_length=20)   

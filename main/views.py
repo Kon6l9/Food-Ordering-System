@@ -240,9 +240,6 @@ def add_to_cart(request, item_id):
 @login_required
 def cart_detail(request, cart_id):
     user = request.user
-    if not user.is_authenticated:
-        return redirect('login')
-
     order = get_object_or_404(Order, id=cart_id, customer=user, status='cart')
     items = order.items.select_related('food_item__section__menu__restaurant')
 
@@ -268,6 +265,7 @@ def adjust_item_quantity(request, item_id, action):
 
     return redirect('cart_detail', cart_id=item.order.id)
 
+@login_required
 def cart_list(request):
     user = request.user
     carts = Order.objects.filter(customer=user, status='cart').select_related('restaurant__menu')
@@ -294,7 +292,6 @@ def confirm_payment(request, order_id):
     return redirect('order_detail', order_id=order.id)
 
 def order_confirmed(request, order_id):
-    # You can add additional context or processing here if needed
     return render(request, 'cart_list.html', {'order_id': order_id})
 
 
@@ -328,7 +325,7 @@ def restaurant_orders(request):
     }
     return render(request, 'restaurant_orders.html', context)
 
-
+@login_required
 def restaurant_bookings(request):
     if not request.user.is_authenticated or not hasattr(request.user, 'restaurant_profile'):
         return redirect('login')
@@ -390,7 +387,7 @@ def booking_details(request, booking_id):
         return HttpResponseForbidden()
     return render(request, 'booking_details.html', {'booking': booking})
 
-
+@login_required
 def menu_search(request):
     query = request.GET.get('query', '')
     if query:

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
 
     'account',
     'main',
+
+    'django_extensions',
 ]
 
 
@@ -91,7 +93,7 @@ WSGI_APPLICATION = 'fos.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test3',
+        'NAME': 'test4',
         'USER': 'postgres',
         'PASSWORD': 'password',
         'HOST': 'localhost',
@@ -99,6 +101,10 @@ DATABASES = {
     }
 }
 
+GRAPH_MODELS = {
+    "all_applications": True,
+    "group_models": True,
+}
 
 
 # Password validation

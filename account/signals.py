@@ -6,11 +6,6 @@ from django.contrib.auth.models import Group
 from main.models import *
 
 
-# @receiver(post_migrate)
-# def create_default_groups(sender, **kwargs):
-#     group_names = ["Customer", "Restaurant"]
-#     for group_name in group_names:
-#         Group.objects.get_or_create(name=group_name)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):

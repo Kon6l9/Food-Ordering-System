@@ -68,6 +68,7 @@
                     Book Now
                 </button>
             {% endif %}
+
             <!-- Button to trigger change menu modal -->
             {% if user.user_type == 'restaurant' %}
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateMenuNameModal">
@@ -78,7 +79,13 @@
                 <input type="file" id="menuImageUpload" style="display: none;" onchange="uploadImage();">
                 <button type="button" onclick="document.getElementById('menuImageUpload').click();" class="btn btn-primary btn-upload">Upload Image</button>
             {% endif %}
+            
         </h2>
+
+    </div>
+    <div class="text-center">
+        {{ restaurant.phone}}
+        {{ restaurant.address}}
     </div>
     <div class="container-fluid mt-4 border shadow-lg " style="min-height:100vh; margin-bottom:20px" >
         <div class="row justify-content-center">
