@@ -78,6 +78,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'main.context_processors.menu_context',
+
             ],
         },
     },
@@ -92,7 +94,7 @@ WSGI_APPLICATION = 'fos.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'test4',
+        'NAME': 'test1',
         'USER': 'postgres',
         'PASSWORD': 'password',
         'HOST': 'localhost',

@@ -116,7 +116,7 @@
                                         <form method="post" action="{% url 'delete_section' %}" class="form-inline">
                                             {% csrf_token %}
                                             <input type="hidden" name="section_id" value="{{ section.id }}">
-                                            <input type="hidden" name="menu_id" value="{{ menu.id }}">  <!-- Include menu ID -->
+                                            <input type="hidden" name="menu_id" value="{{ menu.id }}"> 
                                             <button type="submit" class="btn btn-danger btn">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>

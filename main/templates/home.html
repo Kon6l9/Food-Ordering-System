@@ -89,9 +89,9 @@
       </div>
   </div>
 
-  <div class="home-section bg bg-secondary bg-gradient" id="section-best-restaurants" >
+  <div class="home-section bg" id="section-best-restaurants" style="background-image: url('{% static "bg2.jpg" %}');" >
       <div class="container" >
-          <h2>Our Top Restaurants</h2>
+          <h2 style="color:white">Our Top Restaurants</h2>
           <div class="row">
               {% for menu in menus %}
               <div class="col-md-3">
